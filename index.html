@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LEXIGLOBAL | Sovereign Command</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Noto+Sans+Arabic:wght@300;700;900&display=swap');
+
+body {
+  background-color: #020205;
+  color: white;
+  font-family: 'Noto Sans Arabic', sans-serif;
+  overflow-x: hidden;
+}
+.gold-glow {
+  background: linear-gradient(180deg, #fff 0%, #d4af37 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.4));
+}
+.cyber-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(212, 175, 55, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 2rem;
+}
+.animate-pulse-gold {
+  animation: pulse-gold 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+@keyframes pulse-gold {
+  0%,100% { opacity: 1; transform: scale(1); }
+  50% { opacity: .7; transform: scale(1.05); }
+}
+.custom-scrollbar::-webkit-scrollbar { width: 4px; }
+.custom-scrollbar::-webkit-scrollbar-thumb { background: #d4af37; border-radius: 10px; }
+#login-overlay {
+  background: radial-gradient(circle at center, #0a0a0c 0%, #020205 100%);
+}
+</style>
+</head>
+<body class="custom-scrollbar">
+<!-- شاشة تسجيل الدخول -->
+<div id="login-overlay" class="fixed inset-0 z-[100] flex items-center justify-center p-6 transition-all duration-1000">
+  <div class="max-w-md w-full text-center space-y-8">
+    <div class="relative inline-block">
+      <div class="absolute inset-0 bg-amber-500 blur-3xl opacity-20 animate-pulse"></div>
+      <div class="relative bg-amber-500 p-6 rounded-3xl shadow-2xl">
+        <i class="fas fa-shield-halved text-4xl text-black"></i>
+      </div>
+    </div>
+    <div class="space-y-2">
+      <h1 class="text-3xl font-black gold-glow tracking-tighter italic">بوابة السيادة V12</h1>
+      <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">نظام التحكم المستقل | LEXIGLOBAL CORE</p>
+    </div>
+    <div class="bg-white/5 border border-white/10 p-8 rounded-[3rem] backdrop-blur-xl">
+      <input type="password" id="access-key" placeholder="أدخل مفتاح السيادة"
+             class="w-full bg-black/50 border border-white/10 rounded-2xl py-4 px-6 text-center text-amber-500 font-mono outline-none focus:border-amber-500 transition-all mb-4">
+      <button onclick="attemptLogin()" class="w-full bg-amber-500 text-black font-black py-4 rounded-2xl shadow-xl hover:scale-105 active:scale-95 transition-all">
+        دخول للنظام <i class="fas fa-unlock ml-2"></i>
+      </button>
+      <p class="text-[8px] text-slate-600 mt-4 font-bold uppercase tracking-widest italic text-center">Protected by AES-256 &amp; Ghost Protocol</p>
+    </div>
+  </div>
+</div>
+
+<!-- واجهة النظام الرئيسية -->
+<div id="main-content" class="hidden opacity-0 transition-opacity duration-1000">
+  <header class="fixed top-0 left-0 w-full z-50 bg-black/60 backdrop-blur-3xl border-b border-white/5 px-8 py-4 flex justify-between items-center">
+    <div class="flex items-center gap-4">
+      <div class="p-2 bg-amber-500 rounded-xl animate-bounce">
+        <i class="fas fa-rocket text-black"></i>
+      </div>
+      <div>
+        <h2 class="text-xs font-black italic text-amber-500">LEXI_AUTO_V12</h2>
+        <div class="flex items-center gap-2 text-[8px] font-bold uppercase text-green-500">
+          <span class="w-2 h-2 bg-green-500 rounded-full animate-ping"></span>
+          النظام يعمل ذاتياً (Autopilot)
+        </div>
+      </div>
+    </div>
+    <div class="flex gap-4">
+      <button onclick="logout()" class="bg-red-500/10 border border-red-500/20 text-red-500 px-4 py-2 rounded-xl text-[10px] font-black uppercase">خروج آمن</button>
+    </div>
+  </header>
+
+  <main class="pt-28 pb-32 px-8 max-w-[1600px] mx-auto grid lg:grid-cols-12 gap-8 h-screen overflow-y-auto custom-scrollbar">
+    <div class="lg:col-span-8 space-y-8">
+      <section class="cyber-card p-12 relative overflow-hidden group">
+        <div class="relative z-10">
+          <span class="text-amber-500/60 text-[10px] font-black uppercase tracking-[0.6em] mb-4 block underline">إجمالي نمو الثروة السيادية المدارة آلياً</span>
+          <h1 id="wealth-display" class="text-6xl md:text-9xl font-black italic font-mono gold-glow tracking-tighter leading-none">
+            $0.00
+          </h1>
+          <div class="flex gap-4 mt-8">
+            <div class="flex items-center gap-2 bg-green-500/10 text-green-500 px-4 py-2 rounded-full text-[10px] font-bold">
+              <i class="fas fa-chart-line"></i> معدل النمو: +12% / ساعة
+            </div>
+            <div class="flex items-center gap-2 bg-blue-500/10 text-blue-500 px-4 py-2 rounded-full text-[10px] font-bold">
+              <i class="fas fa-bullseye"></i> استهداف النخبة: فعال
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="bg-black/40 border border-white/5 p-8 rounded-[3.5rem] h-[400px] flex flex-col">
+        <h3 class="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-4 flex items-center gap-2">
+          <i class="fas fa-terminal text-amber-500"></i> مصفوفة التنفيذ التلقائي (Live Operations)
+        </h3>
+        <div id="log-container" class="flex-1 overflow-y-auto font-mono text-[9px] text-slate-400 space-y-2 custom-scrollbar pr-4">
+        </div>
+      </section>
+    </div>
+
+    <div class="lg:col-span-4 space-y-8">
+      <div class="bg-amber-500 p-8 rounded-[3.5rem] text-black shadow-2xl">
+        <div class="flex justify-between items-center mb-6">
+          <i class="fas fa-user-secret text-3xl"></i>
+          <span class="text-[10px] font-black uppercase border-b-2 border-black">Elite Protocol</span>
+        </div>
+        <h4 class="text-2xl font-black italic">نظام استقطاب المحامين</h4>
+        <p class="text-[10px] font-bold mt-2 opacity-80 leading-relaxed">يتم حالياً مراسلة 45 مكتب محاماة دولي في لندن ودبي ونيويورك باستراتيجية "الشراكة الاستثمارية".</p>
+      </div>
+
+      <div class="bg-white/5 border border-white/10 p-8 rounded-[3.5rem] space-y-6">
+        <h3 class="text-xs font-black italic text-blue-500 flex items-center gap-2"><i class="fas fa-wallet"></i> موازنة العقد (200K Limit)</h3>
+        <div class="space-y-4">
+          <div class="flex justify-between text-[10px] font-mono"><span>Voda_Node_07</span><span class="text-amber-500">192K/200K</span></div>
+          <div class="w-full h-1 bg-white/5 rounded-full overflow-hidden"><div class="w-[96%] h-full bg-amber-500"></div></div>
+          <div class="flex justify-between text-[10px] font-mono"><span>We_Node_02</span><span class="text-blue-500">45K/200K</span></div>
+          <div class="w-full h-1 bg-white/5 rounded-full overflow-hidden"><div class="w-[22%] h-full bg-blue-500"></div></div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+let wealth = 6540200150.00;
+const MASTER_KEY = "Xz01012345";
+
+function attemptLogin() {
+  const key = document.getElementById('access-key').value;
+  if (key === MASTER_KEY) {
+    document.getElementById('login-overlay').classList.add('opacity-0','pointer-events-none');
+    setTimeout(() => {
+      document.getElementById('login-overlay').classList.add('hidden');
+      const main = document.getElementById('main-content');
+      main.classList.remove('hidden');
+      setTimeout(() => main.classList.add('opacity-100'), 100);
+      startSystem();
+    }, 1000);
+  } else {
+    alert("مفتاح السيادة غير صحيح. تم تسجيل محاولة الدخول وتشفير الـ IP.");
+  }
+}
+
+function logout() {
+  window.location.reload();
+}
+
+function startSystem() {
+  const logContainer = document.getElementById('log-container');
+  const wealthDisplay = document.getElementById('wealth-display');
+
+  const ops = [
+    "Autopilot: تم اكتشاف مكتب محاماة جديد في نيويورك.. جاري المراسلة.",
+    "Promotion: نشر 50 تدوينة ترويجية في منتديات الاستثمار العالمية.",
+    "Liquidity: تحويل 5,000 لفرع فودافون (010..).. متبقي 8K للحد الأقصى.",
+    "Strategy: استخدام صيغة 'شراكة سيادية' في الرسائل الموجهة لنخبة لندن.",
+    "Security: تم تغيير بروتوكول التشفير للعقدة الحالية لمنع التتبع.",
+    "System: استجابة إيجابية من مكتب استشارات دولي.. البوت المفاوض نشط.",
+    "Network: ربط 3 محافظ جديدة لتوزيع التدفقات المالية تلقائياً."
+  ];
+
+  setInterval(() => {
+    wealth += Math.random() * 50000;
+    wealthDisplay.innerText = "$" + wealth.toLocaleString(undefined, {minimumFractionDigits: 2});
+
+    const log = document.createElement('div');
+    log.className = "flex gap-4 py-2 border-b border-white/[0.02] animate-pulse";
+    log.innerHTML = `<span class="text-slate-600">[${new Date().toLocaleTimeString()}]</span> <span class="text-slate-300 italic">${ops[Math.floor(Math.random() * ops.length)]}</span>`;
+    logContainer.prepend(log);
+    if (logContainer.children.length > 20) logContainer.lastChild.remove();
+  }, 3000);
+}
+</script>
+</body>
+</html>
